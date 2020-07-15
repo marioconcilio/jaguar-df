@@ -1,7 +1,9 @@
 package br.usp.each.saeg.jaguar.core.runner;
 
 import br.usp.each.saeg.badua.core.data.ExecutionDataStore;
+import br.usp.each.saeg.badua.core.data.ExecutionDataWriter;
 import org.junit.runner.Description;
+import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import br.usp.each.saeg.jaguar.core.JaguarClient;
 import br.usp.each.saeg.jaguar.core.Jaguar;
+
+import java.io.FileOutputStream;
 
 public class JaguarRunListener extends RunListener {
 
@@ -47,12 +51,26 @@ public class JaguarRunListener extends RunListener {
  			startTime = System.currentTimeMillis();
 			jaguar.collect(dataStore, currentTestFailed, description.getDisplayName());
 			logger.debug("Time to collect data: {}", System.currentTimeMillis() - startTime);
+
+//			final FileOutputStream output = new FileOutputStream("jaguar_" + description.getDisplayName() + ".out");
+//			jaguar.merge.accept(new ExecutionDataWriter(output));
 		} catch (Exception e) {
 			logger.error("Exception: " + e.toString());
 			logger.error("Exception Message : " + e.getMessage());
 			logger.error("Stacktrace: ");
 			e.printStackTrace(System.err);
 			System.exit(1);
+		}
+	}
+
+	@Override
+	public void testRunFinished(Result result) throws Exception {
+		final FileOutputStream output = new FileOutputStream("jaguar.out");
+		try {
+			jaguar.merge.accept(new ExecutionDataWriter(output));
+		}
+		finally {
+			output.close();
 		}
 	}
 

@@ -1,9 +1,7 @@
 package br.usp.each.saeg.jaguar.core;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -28,8 +26,6 @@ import br.usp.each.saeg.jaguar.core.heuristic.Heuristic;
 import br.usp.each.saeg.jaguar.core.heuristic.HeuristicCalculator;
 import br.usp.each.saeg.jaguar.core.model.core.CoverageStatus;
 import br.usp.each.saeg.jaguar.core.model.core.requirement.AbstractTestRequirement;
-import br.usp.each.saeg.jaguar.core.output.xml.flat.FlatXmlWriter;
-import br.usp.each.saeg.jaguar.core.output.xml.hierarchical.HierarchicalXmlWriter;
 import br.usp.each.saeg.jaguar.core.analysis.DuaCoverageBuilder;
 import br.usp.each.saeg.jaguar.core.output.Matrix;
 
@@ -54,6 +50,8 @@ public class Jaguar {
 	
 	private Long startTime;
 	private Long totalTimeSpent;
+
+	public ExecutionDataStore merge;
 
 	/**
 	 * Construct the Jaguar object.
@@ -107,6 +105,13 @@ public class Jaguar {
 //		if (executionData instanceof DataFlowExecutionDataStore) {
 			logger.trace("Collecting DF coverage");
 
+			if (this.merge == null) {
+				this.merge = executionData;
+			}
+			else {
+				executionData.accept(this.merge);
+			}
+
 			long startTime = System.currentTimeMillis();
 			DuaCoverageBuilder duaCoverageBuilder = new DuaCoverageBuilder();
 			//AbstractAnalyzer analyzer = new DataflowAnalyzer(executionData, duaCoverageBuilder);
@@ -143,6 +148,8 @@ public class Jaguar {
 
 	private void analyzeCoveredClasses(ExecutionDataStore executionData, Analyzer analyzer) {
 		logger.trace("Analyzing covered classes");
+
+
 
 		Collection<File> classFiles = classFilesOfStore(executionData);
 		logger.trace("Class files size = {}", classFiles.size());

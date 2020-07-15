@@ -1,8 +1,9 @@
 package br.usp.each.saeg.jaguar.core;
 
+import java.io.IOException;
 import java.util.Arrays;
 
-import br.usp.each.saeg.badua.agent.rt.internal_04b6ae3.Agent;
+import br.usp.each.saeg.badua.agent.rt.internal_e3d85d0.Agent;
 import br.usp.each.saeg.badua.core.data.ExecutionDataStore;
 
 import org.slf4j.Logger;
@@ -34,7 +35,12 @@ public final class JaguarClient {
 				)
 		);
 
-		agent.reset();
+		try {
+			agent.dump(true);
+		}
+		catch (IOException e) {
+			logger.error("Error agent dump", e);
+		}
 
 		return current;
 	}
