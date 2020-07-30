@@ -1,2 +1,0 @@
-br.usp.each.saeg.jaguar.core.cli.JaguarRunner
-br.usp.each.saeg.jaguar.core.cli.JaguarRunner4Eclipse
