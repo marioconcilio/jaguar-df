@@ -12,6 +12,10 @@
 
     <name>Jaguar Dataflow</name>
 
+    <properties>
+        <jaguarShadedPattern>jaguardf.shaded</jaguarShadedPattern>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>br.usp.each.saeg</groupId>
@@ -71,24 +75,45 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>br.usp.each.saeg.jaguardf.cli.JaguarRunner</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>all</shadedClassifierName>
+                            <minimizeJar>true</minimizeJar>
+                            <relocations>
+                                <relocation>
+                                    <pattern>ch.qos.logback</pattern>
+                                    <shadedPattern>ch.qos.logback.${jaguarShadedPattern}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.commons</pattern>
+                                    <shadedPattern>org.apache.commons.${jaguarShadedPattern}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jacoco</pattern>
+                                    <shadedPattern>org.jacoco.${jaguarShadedPattern}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.kohsuke.args4j</pattern>
+                                    <shadedPattern>org.kohsuke.args4j.${jaguarShadedPattern}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.objectweb.asm</pattern>
+                                    <shadedPattern>org.objectweb.asm.${jaguarShadedPattern}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>org.slf4j.${jaguarShadedPattern}</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
