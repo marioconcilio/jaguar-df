@@ -3,7 +3,7 @@ package br.usp.each.saeg.jaguardf;
 import java.io.IOException;
 import java.util.Arrays;
 
-import br.usp.each.saeg.badua.agent.rt.internal_e3d85d0.Agent;
+import br.usp.each.saeg.badua.agent.rt.internal_60983f5.Agent;
 import br.usp.each.saeg.badua.core.data.ExecutionDataStore;
 
 import org.slf4j.Logger;
